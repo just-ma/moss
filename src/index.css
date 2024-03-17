@@ -1,0 +1,21 @@
+:root {
+  font-family: "SyneMono-Regular", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: "SyneMono-Regular";
+  src: url(./assets/SyneMono-Regular.otf) format("otf"),
+    url(./assets/SyneMono-Regular.ttf) format("ttf"),
+    url(./assets/SyneMono-Regular.woff) format("woff"),
+    url(./assets/SyneMono-Regular.woff2) format("woff2");
+}
