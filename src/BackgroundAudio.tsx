@@ -8,6 +8,7 @@ const INITIAL_VOL = 0.8;
 
 export default function BackgroundAudio({ idle }: { idle: boolean }) {
   const mossAudio = useRef<HTMLAudioElement>(null);
+  const talkAudio = useRef<HTMLAudioElement>(null);
   const ambientAudio1 = useRef<HTMLAudioElement>(null);
   const ambientAudio2 = useRef<HTMLAudioElement>(null);
   const optimisticVol = useRef(INITIAL_VOL);
@@ -15,17 +16,34 @@ export default function BackgroundAudio({ idle }: { idle: boolean }) {
   const [vol, setVol] = useState(INITIAL_VOL);
 
   useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (talkAudio.current?.paused) {
+        talkAudio.current.play();
+      }
+      if (ambientAudio1.current?.paused) {
+        ambientAudio1.current.play();
+      }
+      if (ambientAudio2.current?.paused) {
+        ambientAudio2.current.play();
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!idle) {
-      mossAudio.current?.play();
-      if (ambientAudio1.current && ambientAudio2.current) {
-        optimisticVol.current = 0.45;
-        setVol(INITIAL_VOL - 0.01);
+      if (mossAudio.current) {
+        mossAudio.current.currentTime = 0;
+        mossAudio.current.play();
       }
+      optimisticVol.current = 0.45;
+      setVol(INITIAL_VOL - 0.01);
     } else {
-      if (ambientAudio1.current && ambientAudio2.current) {
-        optimisticVol.current = INITIAL_VOL;
-        setVol(0.01);
-      }
+      optimisticVol.current = INITIAL_VOL;
+      setVol(0.01);
     }
   }, [idle]);
 
@@ -55,7 +73,7 @@ export default function BackgroundAudio({ idle }: { idle: boolean }) {
 
   return (
     <>
-      <audio loop autoPlay>
+      <audio ref={talkAudio} loop autoPlay>
         <source src={TalkAudio} type="audio/mpeg" />
       </audio>
       <audio ref={ambientAudio1} loop autoPlay>
